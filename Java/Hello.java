@@ -21,7 +21,7 @@ public class Hello
        String name="Alex";
        int a=10;
        System.out.println("Name:"+name+", Age:"+age+", Height:"+height);
-        System.out.println("Addition: "+(a-b));
+        System.out.println("Addition: "+(a+b));
 
       
         
