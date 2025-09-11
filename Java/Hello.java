@@ -16,11 +16,13 @@ public class Hello
 
         // boolean bol=true;
 
-       int age=25;
+       int age=25,b=10;
        double height=5.9;
        String name="Alex";
-       
+       int a=10;
        System.out.println("Name:"+name+", Age:"+age+", Height:"+height);
+        System.out.println("Addition: "+(a-b));
+
       
         
 

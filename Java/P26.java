@@ -7,4 +7,3 @@ public class P26 {
         System.out.println(d);
     }
 }
-~
