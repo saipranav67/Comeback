@@ -30,6 +30,7 @@ public class AA_Lab2 {
             if(d==4){
                 print(a,top);
             }
+            in.close();
         }
     }
     public static int push(int a[],int top,int data){
@@ -65,5 +66,6 @@ public class AA_Lab2 {
         for(int i=top;i>=0;i--){
             System.out.println(a[i]);
         }
+    
     }    
 }

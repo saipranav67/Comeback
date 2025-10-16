@@ -85,5 +85,6 @@ public class AA_Lab{
                 s1.print();
             }
         }
+        in.close();
     }
 }
