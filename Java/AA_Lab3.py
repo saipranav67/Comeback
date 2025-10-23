@@ -3,20 +3,22 @@ class Node:
         self.data=d
         self.next=None
         
-class Stack:
+class Queue:
     
     def __init__(self):
         self.head=None
         
-    def push(self,d):
+    def enqueue(self,d):
         Newnode=Node(d)
         if (self.head==None):
             self.head=Newnode
         else:
-            Newnode.next=self.head
-            self.head=Newnode
+            temp=self.head
+            while(temp.next!=None):
+                temp=temp.next
+            temp.next=Newnode
     
-    def pop(self):
+    def dequeue(self):
         if(self.head==None):
             print("Underflow")
             return
@@ -37,7 +39,7 @@ class Stack:
             print(temp.data)
             temp=temp.next
             
-s1=Stack()
+q1=Queue()
 while (True):
     print("""
           Enter Choice-
@@ -52,13 +54,13 @@ while (True):
     if(d==1):
         print("Enter Data: ")
         data=int(input())
-        s1.push(data)
+        q1.enqueue(data)
     elif(d==2):
-        s1.pop()
+        q1.dequeue()
     elif(d==3):
-        s1.top()
+        q1.top()
     elif(d==4):
-        s1.display()
+        q1.display()
     elif(d==5):
         break
     else:
