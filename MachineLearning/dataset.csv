@@ -1,0 +1,7 @@
+Veg,Spicy,Cheap,Street,Popular,Yes
+Veg,Normal,Cheap,Restaurant,Popular,Yes
+Non-Veg,Spicy,Expensive,Restaurant,Popular,No
+Veg,Spicy,Cheap,Street,New,Yes
+Veg,Normal,Cheap,Restaurant,New,Yes
+Non-Veg,Spicy,Cheap,Street,Popular,No
+Veg,Spicy,Expensive,Restaurant,Popular,No
