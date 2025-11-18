@@ -12,7 +12,7 @@ import pandas as pd
 #     'Yes':      ['Yes', 'Yes', 'No', 'Yes', 'Yes', 'No', 'No']
 # }
 
-df = pd.read_csv("C:/Users/saipr/OneDrive/Desktop/Desktop_folders/COMEBACK/MachineLearning/dataset.csv")
+df = pd.read_csv("dataset.csv")
 print("Data Set")
 print(df)
 
