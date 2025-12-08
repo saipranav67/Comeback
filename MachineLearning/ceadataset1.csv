@@ -1,0 +1,7 @@
+Brand,Processor,RAM,Storage,Graphics,Budget,Purchase
+Dell,Intel,i5,SSD,NVIDIA,high,yes
+HP,Intel,i5,HDD,NVIDIA,medium,yes
+Acer,AMD,i3,HDD,Integrated,low,no
+Dell,Intel,i7,SSD,NVIDIA,high,yes
+Lenovo,Intel,i5,SSD,Integrated,medium,no
+HP,AMD,i7,SSD,NVIDIA,high,yes

@@ -1,0 +1,9 @@
+Genre,AgeGroup,Language,ActorFamiliarity,RatingPreference,Platform,Recommended
+Action,Young,English,High,High,Theatre,yes
+Drama,Adult,Hindi,Low,Medium,OTT,no
+Comedy,Teen,English,Medium,High,OTT,yes
+Horror,Young,Hindi,Low,Low,Theatre,no
+Action,Adult,English,Medium,High,OTT,yes
+Romance,Teen,Hindi,Low,Medium,OTT,no
+Comedy,Adult,English,High,High,Theatre,yes
+Horror,Senior,Hindi,Medium,Low,OTT,no

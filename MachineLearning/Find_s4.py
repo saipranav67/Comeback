@@ -1,11 +1,13 @@
 import pandas as pd
 
 df=pd.read_csv("dataset.csv")
-
+print(df.info())
+unique_dict = {col: df[col].unique().tolist() for col in df.columns}
+print(unique_dict)
 df2=df[df['Yes']=='Yes']
 
 df2=df2.drop(columns=['Yes'])
-print(df2.columns)
+#print(df2.columns)
 h1=['Ø']*(len(df2.columns))
 print(h1)
 k=0
