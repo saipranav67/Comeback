@@ -9,4 +9,5 @@ def selection_sort(arr):
     return arr
  # Example
 nums = [64, 25, 12, 22, 11]
+print("Unsorted: ",nums)
 print("Sorted:", selection_sort(nums))
