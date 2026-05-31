@@ -1,0 +1,22 @@
+saipranav@DESKTOP-QSBUE7O:~$ mkdir ~/xml_lab
+cd ~/xml_lab
+saipranav@DESKTOP-QSBUE7O:~/xml_lab$ nano books.xml
+saipranav@DESKTOP-QSBUE7O:~/xml_lab$ nano books.xqy
+saipranav@DESKTOP-QSBUE7O:~$ cd ~/xml_lab
+saipranav@DESKTOP-QSBUE7O:~/xml_lab$ wget https://repo1.maven.org/maven2/net/sf/saxon/Saxon-HE/10.9/Saxon-HE-10.9.jar
+--2026-05-31 13:24:54--  https://repo1.maven.org/maven2/net/sf/saxon/Saxon-HE/10.9/Saxon-HE-10.9.jar
+Resolving repo1.maven.org (repo1.maven.org)... 104.18.18.12, 104.18.19.12, 2606:4700:8393:fa77:1539:0:c262:b56
+Connecting to repo1.maven.org (repo1.maven.org)|104.18.18.12|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 5754909 (5.5M) [application/java-archive]
+Saving to: ‘Saxon-HE-10.9.jar’
+
+Saxon-HE-10.9.jar             100%[=================================================>]   5.49M  4.86MB/s    in 1.1s
+
+2026-05-31 13:24:55 (4.86 MB/s) - ‘Saxon-HE-10.9.jar’ saved [5754909/5754909]
+
+saipranav@DESKTOP-QSBUE7O:~/xml_lab$ java -cp Saxon-HE-10.9.jar net.sf.saxon.Query books.xqy
+<?xml version="1.0" encoding="UTF-8"?><title lang="en">Learn .Net in 24 hours</title><title lang="en">Learn XQuery in 24 hours</title>saipranav@DESKTOP-QSBUE7O:~/xml_lab$ ^C
+saipranav@DESKTOP-QSBUE7O:~/xml_lab$ nano xpath_titles.xqy
+saipranav@DESKTOP-QSBUE7O:~/xml_lab$ java -cp Saxon-HE-10.9.jar net.sf.saxon.Query xpath_titles.xqy
+<?xml version="1.0" encoding="UTF-8"?><title lang="en">Learn Java in 24 Hours</title><title lang="en">Learn .Net in 24 hours</title><title lang="en">Learn XQuery in 24 hours</title>saipranav@DESKTOP-QSBUE7O:~/xml_lab$
