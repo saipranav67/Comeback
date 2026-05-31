@@ -1,0 +1,240 @@
+saipranav@DESKTOP-QSBUE7O:~$ postgres --version
+Command 'postgres' not found, did you mean:
+  command 'postgrey' from deb postgrey (1.37-2)
+Try: sudo apt install <deb name>
+saipranav@DESKTOP-QSBUE7O:~$ psql --version
+psql (PostgreSQL) 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1)
+saipranav@DESKTOP-QSBUE7O:~$ sudo systemctl status postgresql
+[sudo] password for saipranav:
+● postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (/usr/lib/systemd/system/postgresql.service; enabled; preset: enabled)
+     Active: active (exited) since Sun 2026-05-31 12:44:21 UTC; 44s ago
+    Process: 389 ExecStart=/bin/true (code=exited, status=0/SUCCESS)
+   Main PID: 389 (code=exited, status=0/SUCCESS)
+        CPU: 1ms
+
+May 31 12:44:21 DESKTOP-QSBUE7O systemd[1]: Starting postgresql.service - PostgreSQL RDBMS...
+May 31 12:44:21 DESKTOP-QSBUE7O systemd[1]: Finished postgresql.service - PostgreSQL RDBMS.
+saipranav@DESKTOP-QSBUE7O:~$ psql
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  role "saipranav" does not exist
+saipranav@DESKTOP-QSBUE7O:~$ sudo -u postgres psql
+psql (16.13 (Ubuntu 16.13-0ubuntu0.24.04.1))
+Type "help" for help.
+
+postgres=# CREATE DATABASE purchase_order_db;
+CREATE DATABASE
+postgres=# \c purchase_order_db
+You are now connected to database "purchase_order_db" as user "postgres".
+purchase_order_db=# SELECT current_database();
+ current_database
+-------------------
+ purchase_order_db
+(1 row)
+
+purchase_order_db=# CREATE TABLE Customer_reltab (
+    CustNo INT PRIMARY KEY,
+    CustName VARCHAR(200) NOT NULL,
+    Street VARCHAR(200) NOT NULL,
+    City VARCHAR(200) NOT NULL,
+    State CHAR(2) NOT NULL,
+    Zip VARCHAR(20) NOT NULL,
+    Phone1 VARCHAR(20),
+    Phone2 VARCHAR(20),
+    Phone3 VARCHAR(20)
+);
+CREATE TABLE
+purchase_order_db=# CREATE TABLE PurchaseOrder_reltab (
+    PONo INT PRIMARY KEY,
+    CustNo INT REFERENCES Customer_reltab(CustNo),
+    OrderDate DATE,
+    ShipDate DATE,
+    ToStreet VARCHAR(200),
+    ToCity VARCHAR(200),
+    ToState CHAR(2),
+    ToZip VARCHAR(20)
+);
+CREATE TABLE
+purchase_order_db=# CREATE TABLE Stock_reltab (
+    StockNo INT PRIMARY KEY,
+    Price NUMERIC(10,2),
+    TaxRate NUMERIC(5,2)
+);
+CREATE TABLE
+purchase_order_db=# CREATE TABLE LineItems_reltab (
+    LineItemNo INT,
+    PONo INT REFERENCES PurchaseOrder_reltab(PONo),
+    StockNo INT REFERENCES Stock_reltab(StockNo),
+    Quantity INT,
+    Discount NUMERIC(5,2),
+    PRIMARY KEY (PONo, LineItemNo)
+);
+CREATE TABLE
+purchase_order_db=# \dt
+                List of relations
+ Schema |         Name         | Type  |  Owner
+--------+----------------------+-------+----------
+ public | customer_reltab      | table | postgres
+ public | lineitems_reltab     | table | postgres
+ public | purchaseorder_reltab | table | postgres
+ public | stock_reltab         | table | postgres
+(4 rows)
+
+purchase_order_db=# INSERT INTO Customer_reltab VALUES
+(1,'Pranav','Street A','Hyderabad','TS','500001',
+'9999999991','9999999992','9999999993');
+
+INSERT INTO Customer_reltab VALUES
+(2,'Rahul','Street B','Bangalore','KA','560001',
+'8888888881','8888888882','8888888883');
+INSERT 0 1
+INSERT 0 1
+purchase_order_db=# INSERT INTO Stock_reltab VALUES (101,1000,18);
+INSERT INTO Stock_reltab VALUES (102,2000,18);
+INSERT INTO Stock_reltab VALUES (103,500,5);
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+purchase_order_db=# INSERT INTO PurchaseOrder_reltab VALUES
+(
+1001,
+1,
+'2026-05-31',
+'2026-06-05',
+'Street A',
+'Hyderabad',
+'TS',
+'500001'
+);
+INSERT 0 1
+purchase_order_db=# INSERT INTO LineItems_reltab VALUES
+(1,1001,101,2,10);
+
+INSERT INTO LineItems_reltab VALUES
+(2,1001,103,5,5);
+INSERT 0 1
+INSERT 0 1
+purchase_order_db=# SELECT * FROM Customer_reltab;
+SELECT * FROM Stock_reltab;
+SELECT * FROM PurchaseOrder_reltab;
+SELECT * FROM LineItems_reltab;
+ custno | custname |  street  |   city    | state |  zip   |   phone1   |   phone2   |   phone3
+--------+----------+----------+-----------+-------+--------+------------+------------+------------
+      1 | Pranav   | Street A | Hyderabad | TS    | 500001 | 9999999991 | 9999999992 | 9999999993
+      2 | Rahul    | Street B | Bangalore | KA    | 560001 | 8888888881 | 8888888882 | 8888888883
+(2 rows)
+
+ stockno |  price  | taxrate
+---------+---------+---------
+     101 | 1000.00 |   18.00
+     102 | 2000.00 |   18.00
+     103 |  500.00 |    5.00
+(3 rows)
+
+ pono | custno | orderdate  |  shipdate  | tostreet |  tocity   | tostate | tozip
+------+--------+------------+------------+----------+-----------+---------+--------
+ 1001 |      1 | 2026-05-31 | 2026-06-05 | Street A | Hyderabad | TS      | 500001
+(1 row)
+
+ lineitemno | pono | stockno | quantity | discount
+------------+------+---------+----------+----------
+          1 | 1001 |     101 |        2 |    10.00
+          2 | 1001 |     103 |        5 |     5.00
+(2 rows)
+
+purchase_order_db=# SELECT
+    p.PONo,
+    c.CustName,
+    l.LineItemNo,
+    s.StockNo,
+    s.Price,
+    l.Quantity,
+    l.Discount
+FROM PurchaseOrder_reltab p
+JOIN Customer_reltab c
+ON p.CustNo = c.CustNo
+JOIN LineItems_reltab l
+ON p.PONo = l.PONo
+JOIN Stock_reltab s
+ON l.StockNo = s.StockNo;
+ pono | custname | lineitemno | stockno |  price  | quantity | discount
+------+----------+------------+---------+---------+----------+----------
+ 1001 | Pranav   |          1 |     101 | 1000.00 |        2 |    10.00
+ 1001 | Pranav   |          2 |     103 |  500.00 |        5 |     5.00
+(2 rows)
+
+purchase_order_db=# UPDATE Customer_reltab
+SET City='Mumbai'
+WHERE CustNo=1;
+UPDATE 1
+purchase_order_db=# SELECT * FROM Stock_reltab WHERE Price <= 1000;
+SELECT * FROM Stock_reltab WHERE Price >= 1000;
+SELECT * FROM Stock_reltab WHERE Price <> 1000;
+SELECT * FROM Stock_reltab WHERE Price = 1000;
+ stockno |  price  | taxrate
+---------+---------+---------
+     101 | 1000.00 |   18.00
+     103 |  500.00 |    5.00
+(2 rows)
+
+ stockno |  price  | taxrate
+---------+---------+---------
+     101 | 1000.00 |   18.00
+     102 | 2000.00 |   18.00
+(2 rows)
+
+ stockno |  price  | taxrate
+---------+---------+---------
+     102 | 2000.00 |   18.00
+     103 |  500.00 |    5.00
+(2 rows)
+
+ stockno |  price  | taxrate
+---------+---------+---------
+     101 | 1000.00 |   18.00
+(1 row)
+
+purchase_order_db=# CREATE TABLE products(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    properties JSONB
+);
+CREATE TABLE
+purchase_order_db=# INSERT INTO products(name,properties)
+VALUES
+('Laptop','{"color":"black","ram":"16GB"}');
+INSERT 0 1
+purchase_order_db=# SELECT * FROM products;
+ id |  name  |            properties
+----+--------+-----------------------------------
+  1 | Laptop | {"ram": "16GB", "color": "black"}
+(1 row)
+
+purchase_order_db=# SELECT
+    name,
+    properties->>'color' AS color
+FROM products;
+  name  | color
+--------+-------
+ Laptop | black
+(1 row)
+
+purchase_order_db=# CREATE TABLE contacts(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    phones JSONB
+);
+CREATE TABLE
+purchase_order_db=# INSERT INTO contacts(name,phones)
+VALUES
+('Pranav','["9999999999","8888888888"]');
+INSERT 0 1
+purchase_order_db=# SELECT
+name,
+phones->>0 AS primary_phone
+FROM contacts;
+  name  | primary_phone
+--------+---------------
+ Pranav | 9999999999
+(1 row)
+
+purchase_order_db=#
