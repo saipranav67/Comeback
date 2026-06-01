@@ -1,0 +1,238 @@
+saipranav@DESKTOP-QSBUE7O:~$ sqlite3 --version
+3.45.1 2024-01-30 16:01:20 e876e51a0ed5c5b3126f52e532044363a014bc594cfefa87ffb5b82257ccalt1 (64-bit)
+saipranav@DESKTOP-QSBUE7O:~$ python3 --version
+Python 3.12.3
+saipranav@DESKTOP-QSBUE7O:~$ mkdir ~/sqlite_lab
+cd ~/sqlite_lab
+saipranav@DESKTOP-QSBUE7O:~/sqlite_lab$ sqlite3 Test.db
+SQLite version 3.45.1 2024-01-30 16:01:20
+Enter ".help" for usage hints.
+sqlite> CREATE TABLE Advisor(
+AdvisorID INTEGER PRIMARY KEY,
+AdvisorName TEXT NOT NULL
+);
+
+CREATE TABLE Student(
+StudentID INTEGER PRIMARY KEY,
+StudentName TEXT NOT NULL,
+AdvisorID INTEGER,
+FOREIGN KEY(AdvisorID)
+REFERENCES Advisor(AdvisorID)
+);
+sqlite> CREATE TABLE Advisor(
+AdvisorID INTEGER PRIMARY KEY,
+AdvisorName TEXT NOT NULL
+);
+
+CREATE TABLE Student(
+StudentID INTEGER PRIMARY KEY,
+StudentName TEXT NOT NULL,
+AdvisorID INTEGER,
+FOREIGN KEY(AdvisorID)
+REFERENCES Advisor(AdvisorID)
+);
+Parse error: table Advisor already exists
+  CREATE TABLE Advisor( AdvisorID INTEGER PRIMARY KEY, AdvisorName TEXT NOT NULL
+               ^--- error here
+sqlite> INSERT INTO Advisor VALUES
+(1,'John Paul'),
+(2,'Anthony Roy'),
+(3,'Raj Shetty'),
+(4,'Sam Reeds'),
+(5,'Arthur Clintwood');
+
+INSERT INTO Student VALUES
+(501,'Geek1',1),
+(502,'Geek2',1),
+(503,'Geek3',3),
+(504,'Geek4',2),
+(505,'Geek5',4),
+(506,'Geek6',2),
+(507,'Geek7',2),
+(508,'Geek8',3),
+(509,'Geek9',NULL),
+(510,'Geek10',1);
+sqlite> .tables
+Advisor  Student
+sqlite> SELECT * FROM Advisor;
+
+SELECT * FROM Student;
+1|John Paul
+2|Anthony Roy
+3|Raj Shetty
+4|Sam Reeds
+5|Arthur Clintwood
+501|Geek1|1
+502|Geek2|1
+503|Geek3|3
+504|Geek4|2
+505|Geek5|4
+506|Geek6|2
+507|Geek7|2
+508|Geek8|3
+509|Geek9|
+510|Geek10|1
+sqlite> SELECT *
+FROM Student
+WHERE AdvisorID=1;
+501|Geek1|1
+502|Geek2|1
+510|Geek10|1
+sqlite> SELECT
+StudentID,
+StudentName,
+AdvisorName
+FROM Student
+INNER JOIN Advisor
+ON Student.AdvisorID=
+Advisor.AdvisorID;
+501|Geek1|John Paul
+502|Geek2|John Paul
+503|Geek3|Raj Shetty
+504|Geek4|Anthony Roy
+505|Geek5|Sam Reeds
+506|Geek6|Anthony Roy
+507|Geek7|Anthony Roy
+508|Geek8|Raj Shetty
+510|Geek10|John Paul
+sqlite> SELECT
+StudentID,
+StudentName,
+AdvisorName
+FROM Student
+LEFT JOIN Advisor
+USING(AdvisorID);
+501|Geek1|John Paul
+502|Geek2|John Paul
+503|Geek3|Raj Shetty
+504|Geek4|Anthony Roy
+505|Geek5|Sam Reeds
+506|Geek6|Anthony Roy
+507|Geek7|Anthony Roy
+508|Geek8|Raj Shetty
+509|Geek9|
+510|Geek10|John Paul
+sqlite> SELECT
+StudentID,
+StudentName,
+AdvisorName
+FROM Advisor
+LEFT JOIN Student
+USING(AdvisorID);
+501|Geek1|John Paul
+510|Geek10|John Paul
+502|Geek2|John Paul
+504|Geek4|Anthony Roy
+506|Geek6|Anthony Roy
+507|Geek7|Anthony Roy
+503|Geek3|Raj Shetty
+508|Geek8|Raj Shetty
+505|Geek5|Sam Reeds
+||Arthur Clintwood
+sqlite> SELECT StudentID,
+StudentName,
+AdvisorName
+FROM Student
+LEFT JOIN Advisor
+USING(AdvisorID)
+
+UNION ALL
+
+SELECT StudentID,
+StudentName,
+AdvisorName
+FROM Advisor
+LEFT JOIN Student
+USING(AdvisorID)
+
+WHERE Student.AdvisorID IS NULL;
+501|Geek1|John Paul
+502|Geek2|John Paul
+503|Geek3|Raj Shetty
+504|Geek4|Anthony Roy
+505|Geek5|Sam Reeds
+506|Geek6|Anthony Roy
+507|Geek7|Anthony Roy
+508|Geek8|Raj Shetty
+509|Geek9|
+510|Geek10|John Paul
+||Arthur Clintwood
+sqlite> SELECT
+StudentID,
+StudentName,
+AdvisorName
+FROM Student
+CROSS JOIN Advisor;
+501|Geek1|John Paul
+501|Geek1|Anthony Roy
+501|Geek1|Raj Shetty
+501|Geek1|Sam Reeds
+501|Geek1|Arthur Clintwood
+502|Geek2|John Paul
+502|Geek2|Anthony Roy
+502|Geek2|Raj Shetty
+502|Geek2|Sam Reeds
+502|Geek2|Arthur Clintwood
+503|Geek3|John Paul
+503|Geek3|Anthony Roy
+503|Geek3|Raj Shetty
+503|Geek3|Sam Reeds
+503|Geek3|Arthur Clintwood
+504|Geek4|John Paul
+504|Geek4|Anthony Roy
+504|Geek4|Raj Shetty
+504|Geek4|Sam Reeds
+504|Geek4|Arthur Clintwood
+505|Geek5|John Paul
+505|Geek5|Anthony Roy
+505|Geek5|Raj Shetty
+505|Geek5|Sam Reeds
+505|Geek5|Arthur Clintwood
+506|Geek6|John Paul
+506|Geek6|Anthony Roy
+506|Geek6|Raj Shetty
+506|Geek6|Sam Reeds
+506|Geek6|Arthur Clintwood
+507|Geek7|John Paul
+507|Geek7|Anthony Roy
+507|Geek7|Raj Shetty
+507|Geek7|Sam Reeds
+507|Geek7|Arthur Clintwood
+508|Geek8|John Paul
+508|Geek8|Anthony Roy
+508|Geek8|Raj Shetty
+508|Geek8|Sam Reeds
+508|Geek8|Arthur Clintwood
+509|Geek9|John Paul
+509|Geek9|Anthony Roy
+509|Geek9|Raj Shetty
+509|Geek9|Sam Reeds
+509|Geek9|Arthur Clintwood
+510|Geek10|John Paul
+510|Geek10|Anthony Roy
+510|Geek10|Raj Shetty
+510|Geek10|Sam Reeds
+510|Geek10|Arthur Clintwood
+sqlite> .quit
+saipranav@DESKTOP-QSBUE7O:~/sqlite_lab$ sqlite3 Test.db
+SQLite version 3.45.1 2024-01-30 16:01:20
+Enter ".help" for usage hints.
+sqlite> SELECT
+Student.StudentID,
+Student.StudentName,
+Advisor.AdvisorName
+FROM Student
+INNER JOIN Advisor
+ON Student.AdvisorID=Advisor.AdvisorID
+ORDER BY Student.AdvisorID;
+501|Geek1|John Paul
+502|Geek2|John Paul
+510|Geek10|John Paul
+504|Geek4|Anthony Roy
+506|Geek6|Anthony Roy
+507|Geek7|Anthony Roy
+503|Geek3|Raj Shetty
+508|Geek8|Raj Shetty
+505|Geek5|Sam Reeds
+sqlite> .quit
+saipranav@DESKTOP-QSBUE7O:~/sqlite_lab$
